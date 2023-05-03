@@ -100,8 +100,9 @@ function copyNode()
 function genSea()
 {
     console.log('4. Generating SEApp...');
-    const cmdline = `npx postject ${exePath} NODE_SEA_BLOB ${blobPath} --overwrite --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2`;
-    //console.log('full cmd'.bold.debug, cmdline);
+    //const cmdline = `npx postject ${exePath} NODE_SEA_BLOB ${blobPath} --overwrite --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2`;
+    const cmdline = `node node_modules/npm/bin/npx-cli.js postject ${exePath} NODE_SEA_BLOB ${blobPath} --overwrite --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2`;
+    //console.log('full cmd:'.bold.debug, cmdline);
     exec(cmdline,
         { cwd }, (err /*, stdout, stderr*/) => {
             if (err)
