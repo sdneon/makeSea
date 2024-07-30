@@ -5,6 +5,8 @@
 
 This repo is a simple Node.JS+ script to ease creation of SEApp, just by supplying the bootstrap (JS) file. Hiding all the cumbersome steps.
 
+Last tested OK with my [Node.JS 22.4.+](https://github.com/sdneon/node/releases/tag/v22.4.1%2B).
+
 ## Usage
 
 - Prepare your bootstrap file for embedding as SEApp start point.
@@ -12,16 +14,38 @@ This repo is a simple Node.JS+ script to ease creation of SEApp, just by supplyi
 ```
 node makeSea <bootstrap_file_path>
 OR
-node makeSea <bootstrap_file_path> [optional_output_path]
+node makeSea [-i asset1_path -i asset2_path ...] <bootstrap_file_path> [optional_output_path]
 ```
 For example, use the provided sample/hello.js:
 ```
 node makeSea hello
 ```
+To include assets, use `-i` for each of them:
+
+   ```
+   node makeSea -i path/file1.txt -i path/bundle.zip hello
+   ```
+
+   * They will be available as their base filename.
+   * Recommendation:  if you have lots of assets, bundle them in a ZIP archive. Use a ZIP library like [adm-zip](https://github.com/cthackers/adm-zip) to extract them for use in the SEApp. 
+
+Get asset example:
+```js
+const sea = require('node:sea');
+const assetTxt = sea.getAsset('file1.txt', 'utf8'), //returned as string
+    assetBin = sea.getAsset('bundle.zip'); //returned as ArrayBuffer
+
+//extract ZIP'd asset
+const AdmZip = require('adm-zip');
+const zip = new AdmZip(Buffer.from(assetBin)); //need to convert ArrayBuffer to Node.JS' Buffer
+zip.extractAllTo(__dirname); //unzip all
+```
+   * Unzipping the bundle is useful for delivering a local installation.
+   * Alternatively, read individual entries as needed when not all files within are always needed.
 
 ### ✨Magic ✨.
 Under the hood, several intermediate files are generated as needed by Node:
-* SEApp config.json - specifies where bootstrap is, and output to what blob name.
+* SEApp config.json - specifies where bootstrap and optional assets are, and output to what blob name.
 * Blob - the thing to be embedded for v20. Previously in v19, the bootstrap JS is embedded directly instead. From v20, blobs are supposed to make embedding other things easier.
 * SEApp EXE - a copy of node.exe is made as your SEApp.
 
