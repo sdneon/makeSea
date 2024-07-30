@@ -54,13 +54,14 @@ if (parsed.argv.remain.length >= 2)
     {
         outputName = path.parse(outputName).name;
     }
+    outputName = {name: outputName};
 }
 
 let inputPath = path.parse(inputName);
 //path.format: must eliminate 'base' to let 'name'+'ext' take effect!
 const jsonPath = path.format(Object.assign({}, inputPath, {ext:'.seaconfig.json',base:undefined}));
 const blobPath = path.format(Object.assign({}, inputPath, {ext:'.blob',base:undefined}));
-const exePath = path.format(Object.assign({}, inputPath, {name:outputName}, {ext:'.exe',base:undefined}));
+const exePath = path.format(Object.assign({}, inputPath, outputName, {ext:'.exe',base:undefined}));
 
 //1. Generate SEApp's config.json
 console.log('1. Generating config...');
