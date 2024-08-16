@@ -47,7 +47,7 @@ if (parsed.argv.remain.length >= 1)
 }
 else
 {
-    console.log('Syntax: makeSea <input.js> [output.exe]');
+    console.log('Syntax: makeSea  [-i asset1_path -i asset2_path] <input.js> [output.exe]');
     process.exit(1);
 }
 if (parsed.argv.remain.length >= 2)
@@ -74,7 +74,7 @@ const seaConfigContent = {
 };
 if (parsed.include && (parsed.include.length > 0))
 {
-    const assets = parsed.include.reduce((a, v) => { v=path.basename(v); return { ...a, [v]: v}; }, {});
+    const assets = parsed.include.reduce((a, v) => { const basename=path.basename(v); return { ...a, [basename]: v}; }, {});
     Object.assign(seaConfigContent, {assets});
 }
 //console.log(seaConfigContent);
@@ -133,7 +133,7 @@ function genSea()
     //const cmdline = `npx postject ${exePath} NODE_SEA_BLOB ${blobPath} --overwrite --sentinel-fuse NODE_SEA_FUSE_...`;
     const cmdline = `node node_modules/npm/bin/npx-cli.js postject ${exePath} NODE_SEA_BLOB ${blobPath} --overwrite --sentinel-fuse NODE_SEA_FUSE_` + `fce680ab2cc467b6e072b8b5df1996b2`;
     //console.log('full cmd:'.bold.debug, cmdline);
-    exec(cmdline,
+    const child = exec(cmdline,
         { cwd }, (err /*, stdout, stderr*/) => {
             if (err)
             {
@@ -142,4 +142,7 @@ function genSea()
             }
             console.log('4. Generating SEApp...done:'.bold.info, exePath);
         });
+    child.stdout.on('data', function(data) {
+        console.log(data.toString());
+});
 }
