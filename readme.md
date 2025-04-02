@@ -1,22 +1,35 @@
-# makeSea
+# makeSea SEA²
 ## Making a Single-Executable App in Node.JS+ 20
 
-[Single-Executable App](https://nodejs.org/api/all.html#all_single-executable-applications_single-executable-applications) is a new experimental feature from Node.JS 19. It's still evolving. Thus, the steps to make one changed in v20 - extra steps to create a JSON descriptor so as to generate an intermediate BLOB. 
+[Single-Executable App](https://nodejs.org/api/all.html#all_single-executable-applications_single-executable-applications) is a new experimental and evolving feature from Node.JS 19. The steps to make one changed in v20 - extra steps to create a JSON descriptor so as to generate an intermediate BLOB.
 
-This repo is a simple Node.JS+ script to ease creation of SEApp, just by supplying the bootstrap (JS) file. Hiding all the cumbersome steps.
+This repo is a self-contained SEA to ease creation of SEA, just by supplying the bootstrap (JS) file. Hiding all the cumbersome steps.
 
-Last tested OK with my [Node.JS 22.4.+](https://github.com/sdneon/node/releases/tag/v22.4.1%2B).
+Last tested OK with my [Node.JS 23.80.0+](https://github.com/sdneon/node/releases/tag/v23.8.0%2B).
+
+### Going Ahead
+Another limitation of SEA is that it can only have **One** *embedded script* to run! Hence, for more complex projects, bundling and minifying codes is the way to overcome this limitation, along with self-extracting dependencies/resources.
+See companion tools, ***webpack and npm SEA²***s at [this repo](https://github.com/sdneon/webpack-sea).
+
+PS: `makeSea.js` itself is a nice example illustrating how to write a ***self-extracting and single-executable app***, SEA²! Feel free to use it as a template 😁
 
 ## Usage
 
-- Prepare your bootstrap file for embedding as SEApp start point.
-- Make the SEAppp:
+1. **Setup**. Download and put makeSea.exe in a working folder.
+   * *Optionals* to put in the folder too:
+      * Put a copy of of node.exe (an updated version you wish to use) for embedding.
+      * Install npm & postject node modules.
+
+    (You can skip the optionals above if you're fine with using makeSea's bundled versions - which may be outdated. makeSea will simply use any already there, or unpack and use its bundled versions).
+2. **Prep**. Prepare your bootstrap file for embedding as SEA start point.
+3. **Make**. Make the SEA:
 ```
 node makeSea <bootstrap_file_path>
 OR
 node makeSea [-i asset1_path -i asset2_path ...] <bootstrap_file_path> [optional_output_path]
 ```
-For example, use the provided sample/hello.js:
+### Example
+Use the provided sample/hello.js:
 ```
 node makeSea hello
 ```
@@ -43,11 +56,13 @@ zip.extractAllTo(__dirname); //unzip all
    * Unzipping the bundle is useful for delivering a local installation.
    * Alternatively, read individual entries as needed when not all files within are always needed.
 
+See `makeSea.js` itself for details.
+
 ### ✨Magic ✨.
 Under the hood, several intermediate files are generated as needed by Node:
 * SEApp config.json - specifies where bootstrap and optional assets are, and output to what blob name.
 * Blob - the thing to be embedded for v20. Previously in v19, the bootstrap JS is embedded directly instead. From v20, blobs are supposed to make embedding other things easier.
-* SEApp EXE - a copy of node.exe is made as your SEApp.
+* SEA EXE - a copy of node.exe is made as your SEApp.
 
 #### Last Step: npx
 
