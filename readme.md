@@ -1,4 +1,30 @@
 # makeSea SEA²
+## Making a Single-Executable App in Node.JS+ 25.5.0
+
+[Single-Executable App](https://nodejs.org/api/all.html#all_single-executable-applications_single-executable-applications) allows the distribution of a Node.js application conveniently to a system that does not have Node.js installed. This is via packing everything into a single Node.js executable.
+
+The steps to make one is evolving and been further [streamlined in v25.5.0](https://nodejs.org/api/all.html#all_single-executable-applications_generating-single-executable-applications-with---build-sea). Now, only Node.js executable itself is needed, using the new `--build-sea` commandline line option. I.e., blobs and postject are no longer needed. Thus, this makeSea may soon be retired, while remaining as a SEApp code example for bundling assets.
+
+2 ways to build a SEApp (after preparing SEA script and optional assets to bundle):
+* Using Node.JS 25.5.0 and beyond:
+  1. Write the JSON descriptor/configuration file describing contents of SEApp.
+  2. Run `node --build-sea=config_file_path`
+* OR: Using makeSea's commadnline style:
+  1.  Prepare command file with command like `makeSea -i asset_item_path sea_script_path` (with all assets and options listed). You may of course simply run the command directly, though a .BAT file can be reused for updating the SEApp.  
+  2. Run it.
+
+### Commandline Options
+[Usage](#usage) applies, with these ([nopt](https://github.com/npm/nopt) style) options available:
+* `-i`: include given asset; optional; can specify many.
+* SEA configuration options:
+  * `-d` / `--disableExperimentalSEAWarning`: boolean; def: **false**.
+  * `-s` / [`--useSnapshot`](https://nodejs.org/api/all.html#all_single-executable-applications_startup-snapshot-support): boolean; def: **false**. Refer to [doc](https://nodejs.org/api/all.html#all_single-executable-applications_startup-snapshot-support) for details on how to use snapshot correctly.
+  * `-c` / [`--useCodeCache`](https://nodejs.org/api/all.html#all_single-executable-applications_v8-code-cache-support): boolean; def: **false**. Note: `import()` does not work when `useCodeCache` is true.
+  * `-a` / [`--execArgv`](https://nodejs.org/api/all.html#all_single-executable-applications_execution-arguments): array of String of Node.js specific arguments; **optional**; examples: ["--no-warnings", "--max-old-space-size=4096"]
+  * `-e` / [`--execArgvExtension`](https://nodejs.org/api/all.html#all_single-executable-applications_execution-argument-extension): String indicating where SEApp can obtain input arguments from; def: **"env"**, options: "none", "env", "cli".
+* last 2 arguments: path to SEAapp bootstrap script and optional output executable name.
+
+---
 ## Making a Single-Executable App in Node.JS+ 20
 
 [Single-Executable App](https://nodejs.org/api/all.html#all_single-executable-applications_single-executable-applications) is a new experimental and evolving feature from Node.JS 19. The steps to make one changed in v20 - extra steps to create a JSON descriptor so as to generate an intermediate BLOB.
@@ -21,7 +47,7 @@ PS: `makeSea.js` itself is a nice example illustrating how to write a ***self-ex
       * Install npm & postject node modules.
 
     (You can skip the optionals above if you're fine with using makeSea's bundled versions - which may be outdated. makeSea will simply use any already there, or unpack and use its bundled versions).
-2. **Prep**. Prepare your bootstrap file for embedding as SEA start point.
+2. **Prep**. Prepare your bootstrap file for embedding as SEA start point, along with any assets (optional) to be bundled.
 3. **Make**. Make the SEA:
 ```
 node makeSea <bootstrap_file_path>
